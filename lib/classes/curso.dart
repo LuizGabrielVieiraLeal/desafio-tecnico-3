@@ -36,16 +36,4 @@ class Curso {
     final disciplina = Disciplina(codDisciplina, cargaHoraria);
     _disciplinas.add(disciplina);
   }
-
-  int cargaHorariaDaDisciplina(String codDisciplina) {
-    var carga = 0;
-
-    _disciplinas.forEach((disciplina) {
-      if(disciplina.codDisciplina == codDisciplina) {
-        carga = disciplina.cargaHoraria;
-      }
-    });
-
-    return carga;
-  }
 }
