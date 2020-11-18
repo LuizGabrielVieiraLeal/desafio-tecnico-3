@@ -10,8 +10,8 @@ class Aluno {
 
   List<Turma> get historico => _historico;
 
-  int get cargaHorariaCursada {
-    // Cálculo da carga horaria cursada.
+  int get cargaHorariainscritoda {
+    // Cálculo da carga horaria inscritoda.
     var cargaHoraria = 0;
 
     for(final turma in _historico) {
@@ -26,7 +26,7 @@ class Aluno {
     num cr = 0;
 
     for(final turma in _historico) {
-      final resultado = turma.nota * turma.cargaHoraria / cargaHorariaCursada;
+      final resultado = turma.nota * turma.cargaHoraria / cargaHorariainscritoda;
       cr += resultado;
     }
 
@@ -41,13 +41,13 @@ class Aluno {
 
   bool inscrito(String codCurso) {
     // Métdo que verifica se oum aluno tem ligação com um curso.
-    var cursa = false;
+    var inscrito = false;
     _historico.forEach((registro) {
       if(registro.codCurso == codCurso) {
-        cursa = true;
+        inscrito = true;
       }
     });
     
-    return cursa;
+    return inscrito;
   }
 }
