@@ -6,16 +6,12 @@ class Aluno {
 
   Aluno(this._matricula);
 
-  void inserirNoHistorico(String codDisciplina, String codCurso, num nota, int cargaHoraria, String anoSemestre) {
-    final turma = Turma(codDisciplina, codCurso, nota, cargaHoraria, anoSemestre);
-    _historico.add(turma);
-  }
-
   String get matricula => _matricula;
 
   List<Turma> get historico => _historico;
 
   int get cargaHorariaCursada {
+    // Cálculo da carga horaria cursada.
     var cargaHoraria = 0;
 
     for(final turma in _historico) {
@@ -26,6 +22,7 @@ class Aluno {
   }
 
   num get coeficientDeRendimento {
+    // Cálculo do CR = Notas(i) * CargaHraria(i) / TotalCargaHoraria.
     num cr = 0;
 
     for(final turma in _historico) {
@@ -36,7 +33,14 @@ class Aluno {
     return num.parse(cr.toStringAsFixed(2));
   }
 
-  bool cursa(String codCurso) {
+  void inserirNoHistorico(String codDisciplina, String codCurso, num nota, int cargaHoraria, String anoSemestre) {
+    // Método para inserir uma turma no histórico do aluno.
+    final turma = Turma(codDisciplina, codCurso, nota, cargaHoraria, anoSemestre);
+    _historico.add(turma);
+  }
+
+  bool inscrito(String codCurso) {
+    // Métdo que verifica se oum aluno tem ligação com um curso.
     var cursa = false;
     _historico.forEach((registro) {
       if(registro.codCurso == codCurso) {

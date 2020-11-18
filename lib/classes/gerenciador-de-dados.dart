@@ -10,6 +10,7 @@ class GerenciadorDeDados {
     try {
       final linhas = File(_caminhoDoArquivo).readAsStringSync().split('\n');
       
+      // Removendo linhas desnecessárias.
       linhas.removeAt(0);
       linhas.removeAt(linhas.length - 1);
 
@@ -23,6 +24,7 @@ class GerenciadorDeDados {
   }
 
   List _mapearCSV(List<String> linhas){
+    // Método para converter as strings do arquivo em mapas.
     final dados = [];
 
     for(final linha in linhas) {
@@ -45,6 +47,7 @@ class GerenciadorDeDados {
   }
 
   void _gerarDados(List dados) {
+    // Método que cria os alun os e preenche a lista de cursos.
     final alunosCriados = [];
 
     for(final dado in dados) {
@@ -70,6 +73,7 @@ class GerenciadorDeDados {
   }
 
   void mostrarCRDosAlunos() {
+    // Método que imprime CR dos alunos.
     print('------- O CR dos alunos é: --------');
 
     for(final aluno in _alunos) {
@@ -80,20 +84,21 @@ class GerenciadorDeDados {
   }
 
   void mostrarMediaDeCRDosCursos() {
+    // Método que imprime a média CR dos alunos de cada curso.
     print('----- Média de CR dos cursos ------');
 
     _listaDecursos.forEach((curso) {
-      var notaDosAlunosDoCurso = 0.0;
+      var somatorioDasNotas = 0.0;
       var numeroDeAlunos = 0;
 
       _alunos.forEach((aluno) {
-        if(aluno.cursa(curso)) {
-          notaDosAlunosDoCurso += aluno.coeficientDeRendimento;
+        if(aluno.inscrito(curso)) {
+          somatorioDasNotas += aluno.coeficientDeRendimento;
           numeroDeAlunos++;
         }
       });
 
-      var crCurso = notaDosAlunosDoCurso / numeroDeAlunos;
+      var crCurso = somatorioDasNotas / numeroDeAlunos;
 
       print('Curso: ${curso} - Média de CR: ${crCurso.toStringAsFixed(2)}');
     });
