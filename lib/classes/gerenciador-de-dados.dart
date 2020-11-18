@@ -1,11 +1,10 @@
 import 'dart:io';
 import 'package:Desafio/classes/aluno.dart';
-import 'package:Desafio/classes/curso.dart';
 
 class GerenciadorDeDados {
   final String _caminhoDoArquivo;
   final List<Aluno> _alunos = [];
-  final List<Curso> _cursos = [];
+  final List<String> _listaDecursos = [];
 
   GerenciadorDeDados.carregarCSV(this._caminhoDoArquivo) {
     try {
@@ -14,10 +13,9 @@ class GerenciadorDeDados {
       linhas.removeAt(0);
       linhas.removeAt(linhas.length - 1);
 
-      final dados = _mapearCSV(linhas);
+      final mapa = _mapearCSV(linhas);
       
-      _gerarAlunos(dados);
-      _gerarCursos(dados);
+      _gerarDados(mapa);
 
     } catch(e) {
       print('Erro ao carregar arquivo CSV.\nErro: ${e.toString()}');
@@ -46,10 +44,14 @@ class GerenciadorDeDados {
     return dados;
   }
 
-  void _gerarAlunos(List dados) {
+  void _gerarDados(List dados) {
     final alunosCriados = [];
 
     for(final dado in dados) {
+      if(!_listaDecursos.contains(dado['codCurso'])) {
+        _listaDecursos.add(dado['codCurso']);
+      }
+
       if(!alunosCriados.contains(dado['matricula'])) {
         final novoAluno = Aluno(dado['matricula']);
 
@@ -61,27 +63,6 @@ class GerenciadorDeDados {
         for(final aluno in _alunos) {
           if(aluno.matricula == dado['matricula']) {
             aluno.inserirNoHistorico(dado['codDisciplina'], dado['codCurso'], dado['nota'],  dado['cargaHoraria'], dado['anoSemestre']);
-          }
-        }
-      }
-    }
-  }
-
-  void _gerarCursos(List dados) {
-    final cursosCriados = [];
-
-    for(final dado in dados) {
-      if(!cursosCriados.contains(dado['codCurso'])) {
-        final novoCurso = Curso(dado['codCurso']);
-
-        novoCurso.inserirDisciplina(dado['codDisciplina'], dado['cargaHoraria']);
-
-        _cursos.add(novoCurso);
-        cursosCriados.add(dado['codCurso']);
-      } else {
-        for(final curso in _cursos) {
-          if(curso.codCurso == dado['codCurso'] && !curso.possuiDisciplina(dado['codDisciplina'])) {
-            curso.inserirDisciplina(dado['codDisciplina'], dado['cargaHoraria']);
           }
         }
       }
@@ -101,13 +82,12 @@ class GerenciadorDeDados {
   void mostrarMediaDeCRDosCursos() {
     print('----- Média de CR dos cursos ------');
 
-
-    _cursos.forEach((curso) {
+    _listaDecursos.forEach((curso) {
       var notaDosAlunosDoCurso = 0.0;
       var numeroDeAlunos = 0;
 
       _alunos.forEach((aluno) {
-        if(aluno.cursa(curso.codCurso)) {
+        if(aluno.cursa(curso)) {
           notaDosAlunosDoCurso += aluno.coeficientDeRendimento;
           numeroDeAlunos++;
         }
@@ -115,7 +95,7 @@ class GerenciadorDeDados {
 
       var crCurso = notaDosAlunosDoCurso / numeroDeAlunos;
 
-      print('Curso: ${curso.codCurso} - Média de CR: ${crCurso.toStringAsFixed(2)}');
+      print('Curso: ${curso} - Média de CR: ${crCurso.toStringAsFixed(2)}');
     });
 
     print('-----------------------------------');
