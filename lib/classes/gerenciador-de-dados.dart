@@ -1,10 +1,11 @@
 import 'dart:io';
 import 'package:Desafio/classes/aluno.dart';
+import 'package:Desafio/classes/curso.dart';
 
 class GerenciadorDeDados {
   final String _caminhoDoArquivo;
   final List<Aluno> _alunos = [];
-  final List<String> _listaDecursos = [];
+  final List<Curso> _cursos = [];
 
   GerenciadorDeDados.carregarCSV(this._caminhoDoArquivo) {
     try {
@@ -48,11 +49,13 @@ class GerenciadorDeDados {
 
   void _gerarDados(List dados) {
     // Método que cria os alun os e preenche a lista de cursos.
+    final cursosCriados = [];
     final alunosCriados = [];
 
     for(final dado in dados) {
-      if(!_listaDecursos.contains(dado['codCurso'])) {
-        _listaDecursos.add(dado['codCurso']);
+      if(!cursosCriados.contains(dado['codCurso'])) {
+        _cursos.add(Curso(dado['codCurso']));
+        cursosCriados.add(dado['codCurso']);
       }
 
       if(!alunosCriados.contains(dado['matricula'])) {
@@ -87,12 +90,12 @@ class GerenciadorDeDados {
     // Método que imprime a média CR dos alunos de cada curso.
     print('----- Média de CR dos cursos ------');
 
-    _listaDecursos.forEach((curso) {
+    _cursos.forEach((curso) {
       var somatorioDasNotas = 0.0;
       var numeroDeAlunos = 0;
 
       _alunos.forEach((aluno) {
-        if(aluno.inscrito(curso)) {
+        if(aluno.inscrito(curso.codCurso)) {
           somatorioDasNotas += aluno.coeficientDeRendimento;
           numeroDeAlunos++;
         }
@@ -100,7 +103,7 @@ class GerenciadorDeDados {
 
       var crCurso = somatorioDasNotas / numeroDeAlunos;
 
-      print('Curso: ${curso} - Média de CR: ${crCurso.toStringAsFixed(2)}');
+      print('Curso: ${curso.codCurso} - Média de CR: ${crCurso.toStringAsFixed(2)}');
     });
 
     print('-----------------------------------');
