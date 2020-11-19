@@ -48,7 +48,7 @@ class GerenciadorDeDados {
   }
 
   void _gerarDados(List dados) {
-    // Método que cria os alun os e preenche a lista de cursos.
+    // Método cria de cursos e os alunos.
     final cursosCriados = [];
     final alunosCriados = [];
 
