@@ -10,7 +10,7 @@ class Aluno {
 
   List<Turma> get historico => _historico;
 
-  int get cargaHorariainscritoda {
+  int get cargaHoraria {
     // Cálculo da carga horaria inscritoda.
     var cargaHoraria = 0;
 
@@ -26,7 +26,7 @@ class Aluno {
     num cr = 0;
 
     for(final turma in _historico) {
-      final resultado = turma.nota * turma.cargaHoraria / cargaHorariainscritoda;
+      final resultado = turma.nota * turma.cargaHoraria / cargaHoraria;
       cr += resultado;
     }
 
